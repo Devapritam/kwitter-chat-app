@@ -24,32 +24,33 @@ function send() {
 }
 
 function getData() {
-    firebase.database().ref("/"+room_name).on('value',function(snapshot) {
+    firebase.database().ref("/" + room_name).on('value', function (snapshot) {
         document.getElementById("output").innerHTML = "";
-        snapshot.forEach(function(childSnapshot) {
+        snapshot.forEach(function (childSnapshot) {
             childKey = childSnapshot.key;
             childData = childSnapshot.val();
 
             if (childKey != "purpose") {
                 firebase_message_id = childKey;
                 message_data = childData;
+                //Start code
                 console.log(firebase_message_id);
                 console.log(message_data);
                 name = message_data['username'];
                 message = message_data['message'];
                 like = message_data['like'];
-                name_tag = "<h4>"+name+"<img class='user_tick' src='tick.png'></h4>";
-                message_tag = "<h4 class='message_h4'>"+message+"</h4>";
-                like_tag = "<button class='btn btn-warning' id="+firebase_message_id+"value="+like+"onclick='updateLike(this.id)'>";
-                span_tag = "<span><i class='fa fa-thumbs-o-up'></i>&nbsp;Like: "+like+"</span></button><hr>";
+                name_with_tag = "<h4> " + name + "<img class='user_tick' src='tick.png'></h4>";
+                message_with_tag = "<h4 class='message_h4'>" + message + "</h4>";
+                like_button = "<button class='btn btn-warning' id=" + firebase_message_id + " value=" + like + " onclick='updateLike(this.id)'>";
+                span_with_tag = "<span  style='font-family: 'Poppins', sans-serif;'><i class='fa fa-thumbs-up'></i>&nbsp;Like: " + like + "</span></button><hr>";
 
-                row = name_tag + message_tag + like_tag + span_tag;
+                row = name_with_tag + message_with_tag + like_button + span_with_tag;
                 document.getElementById("output").innerHTML += row;
+                //End code
             }
         });
     });
 }
-
 getData();
 
 function updateLike(message_id) {
@@ -62,6 +63,7 @@ function updateLike(message_id) {
     firebase.database().ref(room_name).child(message_id).update({
         like: updated_likes
     });
+
 }
 
 function logout() {
